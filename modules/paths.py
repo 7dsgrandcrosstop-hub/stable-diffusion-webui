@@ -25,19 +25,13 @@ sys.path.insert(0, script_path)
 
 # search for directory of stable diffusion in following places
 sd_path = None
-possible_sd_paths = [
-    "/content/gdrive/MyDrive/sd/stablediffusion",
-    os.path.join(script_path, 'repositories/stable-diffusion-stability-ai'),
-    '.',
-    os.path.dirname(script_path)
-]
+possible_sd_paths = [os.path.join(script_path, 'repositories/stable-diffusion-stability-ai'), '.', os.path.dirname(script_path)]
 for possible_sd_path in possible_sd_paths:
-    if os.path.exists(os.path.join(possible_sd_path, 'ldm/models/diffusion/ddpm.py')) or os.path.exists(possible_sd_path):
+    if os.path.exists(os.path.join(possible_sd_path, 'ldm/models/diffusion/ddpm.py')):
         sd_path = os.path.abspath(possible_sd_path)
         break
 
-if sd_path is None:
-    sd_path = os.path.abspath('/content/gdrive/MyDrive/sd/stablediffusion')
+assert sd_path is not None, f"Couldn't find Stable Diffusion in any of: {possible_sd_paths}"
 
 mute_sdxl_imports()
 
