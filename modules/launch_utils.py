@@ -395,7 +395,7 @@ def prepare_environment():
         # build-isolation environments no longer guarantee it is available.
         # Keep the known-compatible setuptools version in the runtime and
         # build these legacy source archives without an isolated build env.
-        run_pip("install setuptools==69.5.1", "setuptools")
+        run_pip("install setuptools==69.5.1 wheel", "legacy build tools")
         run_pip(f"install --no-build-isolation {clip_package}", "clip")
         startup_timer.record("install clip")
 
