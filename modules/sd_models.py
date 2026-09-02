@@ -12,7 +12,7 @@ from omegaconf import OmegaConf, ListConfig
 from urllib import request
 import ldm.modules.midas as midas
 
-from modules import paths, shared, modelloader, devices, script_callbacks, sd_vae, sd_disable_initialization, errors, hashes, sd_models_config, sd_unet, sd_models_xl, cache, extra_networks, processing, lowvram, sd_hijack, patches
+from modules import paths, shared, modelloader, devices, script_callbacks, sd_vae, sd_disable_initialization, errors, hashes, sd_models_config, sd_unet, sd_models_xl, cache, extra_networks, processing, lowvram, sd_hijack, patches, colab_t4
 from modules.timer import Timer
 from modules.shared import opts
 import tomesd
@@ -444,6 +444,9 @@ def load_model_weights(model, checkpoint_info: CheckpointInfo, state_dict, timer
         model.after_load_weights(state_dict)
 
     del state_dict
+    if colab_t4.enabled():
+        colab_t4.release_checkpoint_memory()
+        timer.record("release checkpoint memory")
 
     # Set is_sdxl_inpaint flag.
     # Checks Unet structure to detect inpaint model. The inpaint model's
