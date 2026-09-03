@@ -165,8 +165,12 @@ class Extension:
                 self.remote = next(repo.remote().urls, None)
                 commit = repo.head.commit
                 self.commit_date = commit.committed_date
-                if repo.active_branch:
+                try:
                     self.branch = repo.active_branch.name
+                except TypeError:
+                    # A pinned detached HEAD is valid (common in reproducible
+                    # Colab installs); it simply has no update branch.
+                    self.branch = None
                 self.commit_hash = commit.hexsha
                 self.version = self.commit_hash[:8]
 

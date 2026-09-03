@@ -3,7 +3,7 @@ from functools import wraps
 import html
 import time
 
-from modules import shared, progress, errors, devices, fifo_lock, profiling
+from modules import shared, progress, errors, devices, fifo_lock, profiling, colab_t4
 
 queue_lock = fifo_lock.FIFOLock()
 
@@ -75,7 +75,7 @@ def wrap_gradio_call_no_job(func, extra_outputs=None, add_stats=False):
         except Exception as e:
             # When printing out our debug argument list,
             # do not print out more than a 100 KB of text
-            max_debug_str_len = 131072
+            max_debug_str_len = colab_t4.debug_argument_limit()
             message = "Error completing request"
             arg_str = f"Arguments: {args} {kwargs}"[:max_debug_str_len]
             if len(arg_str) > max_debug_str_len:
